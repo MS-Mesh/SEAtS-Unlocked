@@ -1,0 +1,53 @@
+# Local secrets, signing material and private research artifacts
+tests/private/
+app/keystore.properties
+app/keystore/
+app/local.properties
+local.properties
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+.tokens.json
+.pkce.json
+.portal_state.json
+/account.txt
+my mail.txt
+AGENTS.md
+.zcode/
+
+# Android and Gradle build output
+.gradle/
+app/.gradle/
+build/
+app/build/
+app/app/build/
+app/.cxx/
+captures/
+*.apk
+!dist/SeatsUnlocked-v1.11-beta.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.hprof
+
+# Python and C# tooling
+__pycache__/
+*.pyc
+.venv/
+venv/
+tests/tools/.state/
+tests/tools/dnprobe/bin/
+tests/tools/dnprobe/obj/
+
+# IDE and OS files
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

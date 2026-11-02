@@ -1,0 +1,40 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:width="108dp"
+	android:height="108dp"
+	android:viewportWidth="108"
+	android:viewportHeight="108">
+
+	<!-- QR finder: top-left -->
+	<path
+		android:fillColor="#FFFFFF"
+		android:pathData="M32,32h16v16h-16zM36,36v8h8v-8z" />
+	<path
+		android:fillColor="#FFFFFF"
+		android:pathData="M40,40h-4v4h4z" />
+
+	<!-- QR finder: top-right -->
+	<path
+		android:fillColor="#FFFFFF"
+		android:pathData="M60,32h16v16h-16zM64,36v8h8v-8z" />
+	<path
+		android:fillColor="#FFFFFF"
+		android:pathData="M68,40h-4v4h4z" />
+
+	<!-- QR finder: bottom-left -->
+	<path
+		android:fillColor="#FFFFFF"
+		android:pathData="M32,60h16v16h-16zM36,64v8h8v-8z" />
+	<path
+		android:fillColor="#FFFFFF"
+		android:pathData="M40,68h-4v4h4z" />
+
+	<!-- data modules -->
+	<path
+		android:fillColor="#7C9CFF"
+		android:pathData="M60,60h6v6h-6zM68,68h6v6h-6zM60,70h4v6h-4zM72,60h4v4h-4z" />
+
+	<!-- check mark -->
+	<path
+		android:fillColor="#6EE7B7"
+		android:pathData="M55,53l3,3l8,-9l3,3l-11,12l-6,-6z" />
+</vector>

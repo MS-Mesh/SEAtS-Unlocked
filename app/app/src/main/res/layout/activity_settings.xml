@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/bg"
+	android:fitsSystemWindows="true"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingHorizontal="12dp">
+
+		<ImageButton
+			android:id="@+id/toolbar_back"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:background="?attr/selectableItemBackgroundBorderless"
+			android:contentDescription="Back"
+			android:padding="10dp"
+			android:src="@android:drawable/ic_media_previous"
+			android:tint="@color/text_primary" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="6dp"
+			android:text="Settings"
+			android:textColor="@color/text_primary"
+			android:textSize="17sp"
+			android:textStyle="bold" />
+	</LinearLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingHorizontal="16dp"
+			android:paddingBottom="28dp">
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:cardBackgroundColor="@color/surface"
+				app:cardCornerRadius="22dp"
+				app:cardElevation="0dp"
+				app:strokeColor="@color/divider"
+				app:strokeWidth="1dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="18dp">
+
+					<TextView
+						android:id="@+id/settings_email"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:textColor="@color/text_primary"
+						android:textSize="16sp"
+						android:textStyle="bold" />
+
+					<TextView
+						android:id="@+id/settings_details"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="10dp"
+						android:lineSpacingExtra="5dp"
+						android:textColor="@color/text_secondary"
+						android:textSize="13sp" />
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="24dp"
+				android:layout_marginBottom="10dp"
+				android:text="Appearance"
+				android:textColor="@color/text_secondary"
+				android:textSize="13sp"
+				android:textStyle="bold" />
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:cardBackgroundColor="@color/surface"
+				app:cardCornerRadius="22dp"
+				app:cardElevation="0dp"
+				app:strokeColor="@color/divider"
+				app:strokeWidth="1dp">
+
+				<com.google.android.material.button.MaterialButtonToggleGroup
+					android:id="@+id/theme_group"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_margin="10dp"
+					app:selectionRequired="true"
+					app:singleSelection="true">
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/theme_system"
+						style="?attr/materialButtonOutlinedStyle"
+						app:backgroundTint="@color/theme_toggle_bg"
+						android:layout_width="0dp"
+						android:layout_height="46dp"
+						android:layout_weight="1"
+						android:text="System"
+						android:textAllCaps="false"
+						android:textColor="@color/theme_toggle_text"
+						app:cornerRadius="14dp"
+						app:strokeColor="@color/divider" />
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/theme_light"
+						style="?attr/materialButtonOutlinedStyle"
+						app:backgroundTint="@color/theme_toggle_bg"
+						android:layout_width="0dp"
+						android:layout_height="46dp"
+						android:layout_weight="1"
+						android:text="Light"
+						android:textAllCaps="false"
+						android:textColor="@color/theme_toggle_text"
+						app:cornerRadius="14dp"
+						app:strokeColor="@color/divider" />
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/theme_dark"
+						style="?attr/materialButtonOutlinedStyle"
+						app:backgroundTint="@color/theme_toggle_bg"
+						android:layout_width="0dp"
+						android:layout_height="46dp"
+						android:layout_weight="1"
+						android:text="Dark"
+						android:textAllCaps="false"
+						android:textColor="@color/theme_toggle_text"
+						app:cornerRadius="14dp"
+						app:strokeColor="@color/divider" />
+				</com.google.android.material.button.MaterialButtonToggleGroup>
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/preview_button"
+				style="?attr/materialButtonOutlinedStyle"
+				android:layout_width="match_parent"
+				android:layout_height="52dp"
+				android:layout_marginTop="18dp"
+				android:text="Open code preview"
+				android:textAllCaps="false"
+				android:textColor="@color/text_primary"
+				app:cornerRadius="26dp"
+				app:strokeColor="@color/divider" />
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/settings_refresh"
+				android:layout_width="match_parent"
+				android:layout_height="52dp"
+				android:layout_marginTop="22dp"
+				android:backgroundTint="@color/accent"
+				android:text="Reload server settings"
+				android:textAllCaps="false"
+				android:textColor="@color/surface"
+				app:cornerRadius="26dp" />
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/settings_logout"
+				style="?attr/materialButtonOutlinedStyle"
+				android:layout_width="match_parent"
+				android:layout_height="52dp"
+				android:layout_marginTop="10dp"
+				android:text="Sign out"
+				android:textAllCaps="false"
+				android:textColor="@color/red_text"
+				app:cornerRadius="26dp"
+				app:strokeColor="@color/divider" />
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="28dp"
+				android:autoLink="web"
+				android:gravity="center"
+				android:lineSpacingExtra="4dp"
+				android:linksClickable="true"
+				android:text="Developed by MS Mesh\nhttps://github.com/MS-Mesh/SEAtS-Unlocked"
+				android:textColor="@color/text_tertiary"
+				android:textSize="12sp" />
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

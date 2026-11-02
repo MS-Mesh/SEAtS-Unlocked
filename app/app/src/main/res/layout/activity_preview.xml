@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/bg"
+	android:fitsSystemWindows="true"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="56dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingHorizontal="12dp">
+
+		<ImageButton
+			android:id="@+id/toolbar_back"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:background="?attr/selectableItemBackgroundBorderless"
+			android:contentDescription="Back"
+			android:padding="10dp"
+			android:src="@android:drawable/ic_media_previous"
+			android:tint="@color/text_primary" />
+
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="6dp"
+			android:layout_weight="1"
+			android:text="Code preview"
+			android:textColor="@color/text_primary"
+			android:textSize="17sp"
+			android:textStyle="bold" />
+	</LinearLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:fillViewport="true">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingHorizontal="16dp"
+			android:paddingBottom="28dp">
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:cardBackgroundColor="@color/surface"
+				app:cardCornerRadius="22dp"
+				app:cardElevation="0dp"
+				app:strokeColor="@color/divider"
+				app:strokeWidth="1dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="18dp">
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="Engine test"
+						android:textColor="@color/text_primary"
+						android:textSize="17sp"
+						android:textStyle="bold" />
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="4dp"
+						android:text="Same MurmurHash2 + Damm implementation the app uses for live codes."
+						android:textColor="@color/text_secondary"
+						android:textSize="12sp" />
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="14dp"
+						android:hint="Seed (numeric string)">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/preview_seed"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:inputType="number"
+							android:text="832105"
+							android:textColor="@color/text_primary"
+							android:textSize="14sp" />
+					</com.google.android.material.textfield.TextInputLayout>
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="8dp"
+						android:hint="Start cutoff (UTC ISO 8601)">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/preview_start"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:inputType="text"
+							android:text="2025-10-08T10:30:00Z"
+							android:textColor="@color/text_primary"
+							android:textSize="14sp" />
+					</com.google.android.material.textfield.TextInputLayout>
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="8dp"
+						android:hint="Duration (seconds)">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/preview_duration"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:inputType="number"
+							android:text="20"
+							android:textColor="@color/text_primary"
+							android:textSize="14sp" />
+					</com.google.android.material.textfield.TextInputLayout>
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/preview_apply"
+						android:layout_width="match_parent"
+						android:layout_height="48dp"
+						android:layout_marginTop="14dp"
+						android:backgroundTint="@color/accent"
+						android:text="Apply"
+						android:textAllCaps="false"
+						android:textColor="@color/surface"
+						app:cornerRadius="24dp" />
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="12dp"
+				app:cardBackgroundColor="@color/surface"
+				app:cardCornerRadius="22dp"
+				app:cardElevation="0dp"
+				app:strokeColor="@color/divider"
+				app:strokeWidth="1dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center_horizontal"
+					android:orientation="vertical"
+					android:padding="20dp">
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="Auto-refreshing QR Code"
+						android:textColor="@color/text_primary"
+						android:textSize="19sp"
+						android:textStyle="bold" />
+
+					<com.google.android.material.card.MaterialCardView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="18dp"
+						app:cardBackgroundColor="#FFFFFF"
+						app:cardCornerRadius="20dp"
+						app:cardElevation="0dp"
+						app:strokeColor="#E5E7EB"
+						app:strokeWidth="1dp">
+
+						<ImageView
+							android:id="@+id/preview_qr"
+							android:layout_width="230dp"
+							android:layout_height="230dp"
+							android:layout_margin="14dp"
+							android:contentDescription="Preview QR code"
+							android:scaleType="fitCenter" />
+					</com.google.android.material.card.MaterialCardView>
+
+					<TextView
+						android:id="@+id/preview_code"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="16dp"
+						android:fontFamily="monospace"
+						android:letterSpacing="0.12"
+						android:text="------"
+						android:textColor="@color/text_primary"
+						android:textSize="42sp"
+						android:textStyle="bold" />
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="18dp"
+						android:gravity="center_vertical"
+						android:orientation="horizontal">
+
+						<TextView
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							android:layout_weight="1"
+							android:text="Time left"
+							android:textColor="@color/text_secondary"
+							android:textSize="13sp" />
+
+						<TextView
+							android:id="@+id/preview_countdown"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:fontFamily="monospace"
+							android:text="00:20"
+							android:textColor="@color/text_primary"
+							android:textSize="15sp"
+							android:textStyle="bold" />
+					</LinearLayout>
+
+					<ProgressBar
+						android:id="@+id/preview_progress"
+						style="?android:attr/progressBarStyleHorizontal"
+						android:layout_width="match_parent"
+						android:layout_height="6dp"
+						android:layout_marginTop="8dp"
+						android:max="1000"
+						android:progressBackgroundTint="@color/divider"
+						android:progressTint="@color/accent" />
+
+					<TextView
+						android:id="@+id/preview_error"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="8dp"
+						android:textColor="@color/red_text"
+						android:textSize="12sp"
+						android:visibility="gone" />
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/preview_copy"
+						android:layout_width="match_parent"
+						android:layout_height="52dp"
+						android:layout_marginTop="18dp"
+						android:backgroundTint="@color/accent"
+						android:text="Copy code"
+						android:textAllCaps="false"
+						android:textColor="@color/surface"
+						app:cornerRadius="26dp" />
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

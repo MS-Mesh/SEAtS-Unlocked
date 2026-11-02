@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/bg"
+	android:fitsSystemWindows="true"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="46dp"
+		android:gravity="center_vertical"
+		android:orientation="horizontal"
+		android:paddingHorizontal="10dp">
+
+		<ImageButton
+			android:id="@+id/toolbar_back"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
+			android:background="?attr/selectableItemBackgroundBorderless"
+			android:contentDescription="Back"
+			android:padding="9dp"
+			android:src="@android:drawable/ic_media_previous"
+			android:tint="@color/text_primary" />
+
+		<TextView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="6dp"
+			android:layout_weight="1"
+			android:text="Event"
+			android:textColor="@color/text_primary"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+	</LinearLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:fillViewport="true">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingHorizontal="14dp"
+			android:paddingBottom="14dp">
+
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:cardBackgroundColor="@color/surface"
+				app:cardCornerRadius="20dp"
+				app:cardElevation="0dp"
+				app:strokeColor="@color/divider"
+				app:strokeWidth="1dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="12dp">
+
+					<TextView
+						android:id="@+id/event_title"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:maxLines="2"
+						android:textColor="@color/text_primary"
+						android:textSize="19sp"
+						android:textStyle="bold" />
+
+					<TextView
+						android:id="@+id/event_subtitle"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="3dp"
+						android:maxLines="2"
+						android:textColor="@color/text_secondary"
+						android:textSize="12sp" />
+
+					<TextView
+						android:id="@+id/event_time"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="2dp"
+						android:textColor="@color/text_primary"
+						android:textSize="12sp" />
+
+					<TextView
+						android:id="@+id/event_status"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="7dp"
+						android:paddingHorizontal="10dp"
+						android:paddingVertical="4dp"
+						android:textSize="10sp"
+						android:textStyle="bold" />
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<LinearLayout
+				android:id="@+id/code_section"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:orientation="vertical">
+
+				<com.google.android.material.card.MaterialCardView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					app:cardBackgroundColor="@color/surface"
+					app:cardCornerRadius="20dp"
+					app:cardElevation="0dp"
+					app:strokeColor="@color/divider"
+					app:strokeWidth="1dp">
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:gravity="center_horizontal"
+						android:orientation="vertical"
+						android:padding="12dp">
+
+						<TextView
+							android:id="@+id/code_title"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="Live check-in code"
+							android:textColor="@color/text_primary"
+							android:textSize="16sp"
+							android:textStyle="bold" />
+
+						<com.google.android.material.card.MaterialCardView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="8dp"
+							app:cardBackgroundColor="#FFFFFF"
+							app:cardCornerRadius="16dp"
+							app:cardElevation="0dp"
+							app:strokeColor="#E5E7EB"
+							app:strokeWidth="1dp">
+
+							<ImageView
+								android:id="@+id/qr"
+								android:layout_width="150dp"
+								android:layout_height="150dp"
+								android:layout_margin="8dp"
+								android:contentDescription="Check-in QR code"
+								android:scaleType="fitCenter" />
+						</com.google.android.material.card.MaterialCardView>
+
+						<TextView
+							android:id="@+id/code"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="6dp"
+							android:fontFamily="monospace"
+							android:letterSpacing="0.1"
+							android:text="------"
+							android:textColor="@color/text_primary"
+							android:textSize="32sp"
+							android:textStyle="bold" />
+
+						<LinearLayout
+							android:id="@+id/countdown_row"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="5dp"
+							android:gravity="center_vertical"
+							android:orientation="horizontal">
+
+							<TextView
+								android:layout_width="0dp"
+								android:layout_height="wrap_content"
+								android:layout_weight="1"
+								android:text="Time left"
+								android:textColor="@color/text_secondary"
+								android:textSize="12sp" />
+
+							<TextView
+								android:id="@+id/countdown"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:fontFamily="monospace"
+								android:text="00:20"
+								android:textColor="@color/text_primary"
+								android:textSize="13sp"
+								android:textStyle="bold" />
+						</LinearLayout>
+
+						<ProgressBar
+							android:id="@+id/countdown_progress"
+							style="?android:attr/progressBarStyleHorizontal"
+							android:layout_width="match_parent"
+							android:layout_height="5dp"
+							android:layout_marginTop="4dp"
+							android:max="1000"
+							android:progressBackgroundTint="@color/divider"
+							android:progressTint="@color/accent" />
+
+						<TextView
+							android:id="@+id/auto_refresh_label"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="3dp"
+							android:text="Valid for this class · read from your portal"
+							android:textColor="@color/text_tertiary"
+							android:textSize="11sp" />
+
+						<com.google.android.material.button.MaterialButton
+							android:id="@+id/copy_button"
+							style="?attr/materialButtonOutlinedStyle"
+							android:layout_width="match_parent"
+							android:layout_height="46dp"
+							android:layout_marginTop="10dp"
+							android:backgroundTint="@color/surface"
+							android:text="Copy code"
+							android:textAllCaps="false"
+							android:textColor="@color/text_primary"
+							android:textSize="13sp"
+							app:cornerRadius="23dp"
+							app:strokeColor="@color/divider" />
+
+						<com.google.android.material.button.MaterialButton
+							android:id="@+id/inject_button"
+							android:layout_width="match_parent"
+							android:layout_height="50dp"
+							android:layout_marginTop="8dp"
+							android:backgroundTint="@color/button_blue"
+							android:text="Inject to Seats"
+							android:textAllCaps="false"
+							android:textColor="#FFFFFF"
+							android:textSize="14sp"
+							app:cornerRadius="25dp" />
+
+						<TextView
+							android:id="@+id/result_message"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="6dp"
+							android:gravity="center"
+							android:lineSpacingExtra="1dp"
+							android:textColor="@color/text_secondary"
+							android:textSize="12sp" />
+					</LinearLayout>
+				</com.google.android.material.card.MaterialCardView>
+			</LinearLayout>
+
+			<com.google.android.material.card.MaterialCardView
+				android:id="@+id/no_code_card"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				app:cardBackgroundColor="@color/surface"
+				app:cardCornerRadius="20dp"
+				app:cardElevation="0dp"
+				app:strokeColor="@color/divider"
+				app:strokeWidth="1dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="16dp">
+
+					<TextView
+						android:id="@+id/no_code_title"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="No live code yet"
+						android:textColor="@color/text_primary"
+						android:textSize="16sp"
+						android:textStyle="bold" />
+
+					<TextView
+						android:id="@+id/no_code"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="4dp"
+						android:lineSpacingExtra="2dp"
+						android:text="The app can read the class code from your own portal session."
+						android:textColor="@color/text_secondary"
+						android:textSize="13sp" />
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/portal_button"
+						android:layout_width="match_parent"
+						android:layout_height="48dp"
+						android:layout_marginTop="12dp"
+						android:backgroundTint="@color/button_blue"
+						android:text="Get code from portal"
+						android:textAllCaps="false"
+						android:textColor="#FFFFFF"
+						android:textSize="14sp"
+						app:cornerRadius="24dp" />
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/bg"
+	android:fillViewport="true"
+	android:fitsSystemWindows="true">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:orientation="vertical"
+		android:paddingHorizontal="20dp"
+		android:paddingTop="48dp"
+		android:paddingBottom="24dp">
+
+		<com.google.android.material.card.MaterialCardView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:cardBackgroundColor="@color/surface"
+			app:cardCornerRadius="28dp"
+			app:cardElevation="1dp"
+			app:strokeColor="@color/divider"
+			app:strokeWidth="1dp">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:padding="24dp">
+
+				<TextView
+					android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:background="@drawable/bg_logo"
+					android:gravity="center"
+					android:text="S"
+					android:textColor="#FFFFFF"
+					android:textSize="28sp"
+					android:textStyle="bold" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="20dp"
+					android:text="Seats unlocked"
+					android:textColor="@color/text_primary"
+					android:textSize="28sp"
+					android:textStyle="bold" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="6dp"
+					android:text="Live codes and one-tap check-in"
+					android:textColor="@color/text_secondary"
+					android:textSize="14sp" />
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="28dp"
+					android:hint="University email"
+					app:boxBackgroundColor="@color/surface_alt"
+					app:boxCornerRadiusBottomEnd="14dp"
+					app:boxCornerRadiusBottomStart="14dp"
+					app:boxCornerRadiusTopEnd="14dp"
+					app:boxCornerRadiusTopStart="14dp"
+					app:boxStrokeColor="@color/accent_blue"
+					app:hintTextColor="@color/text_secondary">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/email"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="textEmailAddress"
+						android:maxLines="1"
+						android:textColor="@color/text_primary"
+						android:textSize="15sp" />
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/sign_in"
+					android:layout_width="match_parent"
+					android:layout_height="54dp"
+					android:layout_marginTop="18dp"
+					android:backgroundTint="@color/accent"
+					android:text="Continue with Microsoft"
+					android:textAllCaps="false"
+					android:textColor="#FFFFFF"
+					android:textSize="15sp"
+					app:cornerRadius="16dp" />
+
+				<ProgressBar
+					android:id="@+id/login_progress"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal"
+					android:layout_marginTop="16dp"
+					android:indeterminateTint="@color/accent"
+					android:visibility="gone" />
+
+				<TextView
+					android:id="@+id/login_error"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="14dp"
+					android:textColor="@color/red_text"
+					android:textSize="13sp"
+					android:visibility="gone" />
+			</LinearLayout>
+		</com.google.android.material.card.MaterialCardView>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="18dp"
+			android:gravity="center"
+			android:text="You sign in on your university's Microsoft page. This app never sees or stores your password."
+			android:textColor="@color/text_tertiary"
+			android:textSize="12sp" />
+	</LinearLayout>
+</ScrollView>

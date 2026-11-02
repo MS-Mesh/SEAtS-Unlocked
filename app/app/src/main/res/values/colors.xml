@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="bg">#F4F5F7</color>
+	<color name="surface">#FFFFFF</color>
+	<color name="surface_alt">#F9FAFB</color>
+	<color name="text_primary">#111827</color>
+	<color name="text_secondary">#6B7280</color>
+	<color name="text_tertiary">#9CA3AF</color>
+	<color name="accent">#1F2937</color>
+	<color name="accent_blue">#2563EB</color>
+	<color name="divider">#E5E7EB</color>
+	<color name="green_bg">#D1FAE5</color>
+	<color name="green_text">#065F46</color>
+	<color name="blue_bg">#DBEAFE</color>
+	<color name="blue_text">#1D4ED8</color>
+	<color name="gray_bg">#F3F4F6</color>
+	<color name="gray_text">#6B7280</color>
+	<color name="red_text">#DC2626</color>
+	<color name="orange_bg">#FFEDD5</color>
+	<color name="orange_text">#9A3412</color>
+	<color name="red_bg">#FEE2E2</color>
+	<color name="button_blue">#2563EB</color>
+</resources>
