@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.msmesh.seats.BuildConfig;
 import com.msmesh.seats.R;
 import com.msmesh.seats.SeatsApp;
@@ -19,9 +20,11 @@ import com.msmesh.seats.data.AuthStore;
 import com.msmesh.seats.data.Prefs;
 import com.msmesh.seats.data.UserInfo;
 import com.msmesh.seats.net.SeatsApi;
+import com.msmesh.seats.net.CheckInScheduler;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -61,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 		findViewById(R.id.preview_button).setOnClickListener(view -> startActivity(new Intent(this, PreviewActivity.class)));
 		findViewById(R.id.settings_refresh).setOnClickListener(view -> reload());
+		findViewById(R.id.settings_results).setOnClickListener(view -> showCheckInResults());
 		findViewById(R.id.settings_logout).setOnClickListener(view -> {
 			prefs.clearPortalData();
 			AuthManager.logout(this);
@@ -68,6 +72,24 @@ public class SettingsActivity extends AppCompatActivity {
 			finishAffinity();
 		});
 		reload();
+	}
+
+	private void showCheckInResults() {
+		List<CheckInScheduler.SavedResult> results = CheckInScheduler.results(this);
+		MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(this).setTitle("Scheduled check-in results").setPositiveButton("Close", null);
+		if (results.isEmpty()) {
+			dialog.setMessage("No saved results for this account.");
+		} else {
+			String[] labels = new String[results.size()];
+			SimpleDateFormat format = new SimpleDateFormat("d MMM HH:mm", Locale.getDefault());
+			for (int i = 0; i < results.size(); i++) {
+				CheckInScheduler.SavedResult result = results.get(i);
+				labels[i] = result.title + "\n" + format.format(new Date(result.time)) + " · " + result.outcome.state;
+			}
+			dialog.setItems(labels, (view, which) -> new MaterialAlertDialogBuilder(this).setTitle(results.get(which).title)
+					.setMessage(results.get(which).outcome.message).setPositiveButton("Close", null).show());
+		}
+		dialog.show();
 	}
 
 	/** Loads the user identity immediately and tenant settings in the background. */

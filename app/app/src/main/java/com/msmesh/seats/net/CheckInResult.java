@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Top-level response of /api/v2/students/myself/checkinwithcode.
  * isValid means the code is correct; it does not mean attendance was applied.
- * The nested checkInResponse is parsed from raw in EventActivity.
+	 * The nested checkInResponse is interpreted by CheckInOutcome.
  */
 public class CheckInResult {
 	@SerializedName("success") public boolean success;

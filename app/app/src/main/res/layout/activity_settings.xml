@@ -161,6 +161,18 @@
 				app:strokeColor="@color/divider" />
 
 			<com.google.android.material.button.MaterialButton
+				android:id="@+id/settings_results"
+				style="?attr/materialButtonOutlinedStyle"
+				android:layout_width="match_parent"
+				android:layout_height="52dp"
+				android:layout_marginTop="10dp"
+				android:text="Scheduled check-in results"
+				android:textAllCaps="false"
+				android:textColor="@color/text_primary"
+				app:cornerRadius="26dp"
+				app:strokeColor="@color/divider" />
+
+			<com.google.android.material.button.MaterialButton
 				android:id="@+id/settings_refresh"
 				android:layout_width="match_parent"
 				android:layout_height="52dp"

@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,22 +23,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.msmesh.seats.R;
 import com.msmesh.seats.code.QrRenderer;
 import com.msmesh.seats.code.SeatsCode;
 import com.msmesh.seats.data.Event;
 import com.msmesh.seats.data.Prefs;
-import com.msmesh.seats.net.CheckInResult;
 import com.msmesh.seats.net.CheckInScheduler;
+import com.msmesh.seats.net.CheckInOutcome;
 import com.msmesh.seats.net.SeatsApi;
 import com.msmesh.seats.util.TimeFormat;
 import com.msmesh.seats.util.TimeSync;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -63,6 +61,12 @@ public class EventActivity extends AppCompatActivity {
 	private boolean injecting;
 	private boolean seedCheckRunning;
 	private long lastSeedCheck;
+	private String account;
+	private String resultVersion = "";
+	private CheckInOutcome lastOutcome;
+	private final SharedPreferences.OnSharedPreferenceChangeListener resultListener = (preferences, key) -> {
+		if (key == null || key.startsWith("result_")) runOnUiThread(this::showSavedResult);
+	};
 
 	private TextView codeView;
 	private TextView codeTitle;
@@ -109,6 +113,7 @@ public class EventActivity extends AppCompatActivity {
 		}
 		setContentView(R.layout.activity_event);
 		api = new SeatsApi(this);
+		account = CheckInScheduler.account(this);
 		prefs = new Prefs(this);
 		duration = prefs.duration();
 		portalCode = prefs.portalCode(event.timeTableId);
@@ -142,6 +147,8 @@ public class EventActivity extends AppCompatActivity {
 			int serverDuration = api.durationSeconds();
 			runOnUiThread(() -> duration = serverDuration);
 		});
+		CheckInScheduler.preferences(this).registerOnSharedPreferenceChangeListener(resultListener);
+		showSavedResult();
 		refreshDetail();
 		handler.post(ticker);
 	}
@@ -259,7 +266,7 @@ public class EventActivity extends AppCompatActivity {
 			autoRefreshLabel.setText("Valid for this class · read from your portal");
 			setCode(portalCode);
 		}
-		injectButton.setEnabled(!injecting);
+		injectButton.setEnabled(!injecting && !CheckInScheduler.isRunning(event.timeTableId));
 		injectButton.setText(CheckInScheduler.isScheduled(this, event.timeTableId) ? "Cancel scheduled check-in" : "Inject to Seats");
 	}
 
@@ -331,20 +338,39 @@ public class EventActivity extends AppCompatActivity {
 
 	/** Immediate inside the window, scheduled in the future, backdated for a past lecture. */
 	private void inject() {
-		if (currentCode == null || injecting) return;
+		inject(false);
+	}
+
+	private void inject(boolean repeatConfirmed) {
+		if (currentCode == null || injecting || CheckInScheduler.isRunning(event.timeTableId)) return;
 		String code = currentCode;
 		if (CheckInScheduler.isScheduled(this, event.timeTableId)) {
-			CheckInScheduler.cancel(this, event.timeTableId);
-			resultView.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
-			resultView.setText("Scheduled check-in cancelled.");
+			try {
+				CheckInScheduler.cancel(this, event.timeTableId);
+				resultView.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
+				resultView.setText("Scheduled check-in cancelled.");
+			} catch (RuntimeException error) {
+				resultView.setText("The attempt may already have started. Check its saved result.");
+			}
 			update();
+			return;
+		}
+		if (!repeatConfirmed && lastOutcome != null && lastOutcome.state != CheckInOutcome.State.REJECTED) {
+			new MaterialAlertDialogBuilder(this).setTitle("Send another check-in?")
+					.setMessage(lastOutcome.message + "\n\nCheck your attendance first. Another submission may duplicate the previous operation.")
+					.setNegativeButton("Go back", null).setPositiveButton("Send again", (dialog, which) -> inject(true)).show();
 			return;
 		}
 		long now = TimeSync.nowSeconds();
 		if (event.startCutoff > 0 && now < event.startCutoff) {
-			CheckInScheduler.schedule(this, event, code);
-			resultView.setTextColor(ContextCompat.getColor(this, R.color.green_text));
-			resultView.setText("Check-in scheduled for " + TimeFormat.local(event.startCutoff + 60) + ". Keep the phone online.");
+			try {
+				CheckInScheduler.schedule(this, event, code);
+				lastOutcome = null;
+				resultView.setTextColor(ContextCompat.getColor(this, R.color.green_text));
+				resultView.setText("Check-in scheduled for " + TimeFormat.local(event.startCutoff + 60) + ". Keep the phone online. Results are saved in Settings.");
+			} catch (RuntimeException error) {
+				resultView.setText("Could not schedule the check-in. Check your sign-in and alarm permissions.");
+			}
 			update();
 			return;
 		}
@@ -353,78 +379,49 @@ public class EventActivity extends AppCompatActivity {
 		resultView.setText("Sending check-in…");
 		resultView.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
 		executor.execute(() -> {
+			boolean started = false;
+			CheckInOutcome outcome;
 			try {
-				CheckInResult result = api.checkIn(event, code);
-				runOnUiThread(() -> {
-					injecting = false;
-					injectButton.setEnabled(true);
-					CheckInOutcome outcome = readOutcome(result);
-					if (outcome.applied) {
-						resultView.setTextColor(ContextCompat.getColor(this, R.color.green_text));
-						String windowNote = result.usedWindowTime ? " · sent with the lecture window time" : "";
-						resultView.setText("Check-in accepted" + windowNote + suffix(outcome.messages));
-						event.swipeInDateTime = outcome.swipeIn;
-						if (outcome.statusId > 0) event.attendanceStatusId = outcome.statusId;
-						updateStatus(TimeSync.nowSeconds());
-					} else if (outcome.queued) {
-						resultView.setTextColor(ContextCompat.getColor(this, R.color.orange_text));
-						resultView.setText("Code accepted, but attendance is not applied yet. The check-in window is "
-								+ TimeFormat.local(event.startCutoff) + " – " + TimeFormat.local(event.endCutoff) + ".");
-					} else {
-						resultView.setTextColor(ContextCompat.getColor(this, R.color.orange_text));
-						String message = outcome.messages.isEmpty() ? result.message() : String.join(" ", outcome.messages);
-						resultView.setText("Server: " + message);
-					}
-				});
+				started = CheckInScheduler.startManual(this, event.timeTableId);
+				outcome = started ? CheckInOutcome.read(api.checkIn(event, code))
+						: CheckInOutcome.unknown("A check-in is already scheduled or being sent. No additional request was sent.");
 			} catch (Exception error) {
-				runOnUiThread(() -> {
-					injecting = false;
-					injectButton.setEnabled(true);
-					resultView.setTextColor(ContextCompat.getColor(this, R.color.red_text));
-					resultView.setText(error.getMessage());
-				});
+				outcome = CheckInOutcome.failed(error);
+			} finally {
+				if (started) CheckInScheduler.finishManual(event.timeTableId);
 			}
+			CheckInOutcome result = outcome;
+			runOnUiThread(() -> {
+				if (isFinishing() || isDestroyed()) return;
+				injecting = false;
+				showOutcome(result);
+				update();
+			});
 		});
 	}
 
-	private static String suffix(List<String> messages) {
-		return messages == null || messages.isEmpty() ? "" : ": " + String.join(" ", messages);
-	}
-
-	/** isValid only means the code is correct; applied means the schedule actually got a swipe timestamp. */
-	private CheckInOutcome readOutcome(CheckInResult result) {
-		CheckInOutcome outcome = new CheckInOutcome();
-		outcome.messages = result.messages;
-		try {
-			JsonObject response = JsonParser.parseString(result.raw).getAsJsonObject().getAsJsonObject("checkInResponse");
-			if (response == null) return outcome;
-			JsonElement success = response.get("success");
-			boolean responseSuccess = success != null && success.isJsonPrimitive() && success.getAsBoolean();
-			JsonObject schedule = response.getAsJsonObject("studentSchedule");
-			JsonElement swipe = schedule == null ? null : schedule.get("swipeInDateTime");
-			boolean hasSwipe = swipe != null && !swipe.isJsonNull();
-			int statusId = 0;
-			if (schedule != null && schedule.has("attendanceStatusId")) {
-				try {
-					statusId = schedule.get("attendanceStatusId").getAsInt();
-				} catch (Exception ignored) {
-				}
-			}
-			outcome.applied = hasSwipe || statusId == 2 || statusId == 3 || statusId == 7;
-			outcome.queued = !outcome.applied && responseSuccess;
-			outcome.statusId = statusId;
-			if (hasSwipe) outcome.swipeIn = (int) TimeSync.nowSeconds();
-		} catch (Exception ignored) {
+	private void showOutcome(CheckInOutcome outcome) {
+		lastOutcome = outcome;
+		int color = outcome.state == CheckInOutcome.State.CONFIRMED ? R.color.green_text
+				: outcome.state == CheckInOutcome.State.REJECTED ? R.color.red_text : R.color.orange_text;
+		resultView.setTextColor(ContextCompat.getColor(this, color));
+		resultView.setText(outcome.message + (outcome.usedWindowTime ? " · sent with the lecture window time" : ""));
+		if (outcome.state == CheckInOutcome.State.CONFIRMED) {
+			if (outcome.swipeIn > 0 && outcome.swipeIn <= Integer.MAX_VALUE) event.swipeInDateTime = (int) outcome.swipeIn;
+			if (outcome.statusId == 2 || outcome.statusId == 3 || outcome.statusId == 7) event.attendanceStatusId = outcome.statusId;
+			else if (event.swipeInDateTime > 0) event.attendanceStatusId = null;
+			updateStatus(TimeSync.nowSeconds());
 		}
-		return outcome;
 	}
 
-	private static final class CheckInOutcome {
-		boolean applied;
-		boolean queued;
-		int swipeIn;
-		int statusId;
-		List<String> messages;
+	private void showSavedResult() {
+		if (event == null || injecting || isDestroyed()) return;
+		CheckInScheduler.SavedResult saved = CheckInScheduler.result(this, event.timeTableId, account);
+		if (saved == null) return;
+		String version = saved.attemptId + ":" + saved.outcome.state + ":" + saved.outcome.message;
+		if (version.equals(resultVersion)) return;
+		resultVersion = version;
+		showOutcome(saved.outcome);
 	}
 
 	private void chip(TextView view, String text, int backgroundRes, int foregroundRes) {
@@ -438,6 +435,7 @@ public class EventActivity extends AppCompatActivity {
 
 	@Override
 	protected void onDestroy() {
+		CheckInScheduler.preferences(this).unregisterOnSharedPreferenceChangeListener(resultListener);
 		handler.removeCallbacksAndMessages(null);
 		executor.shutdownNow();
 		super.onDestroy();

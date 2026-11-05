@@ -2,6 +2,7 @@ package com.msmesh.seats.net;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -13,6 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.BufferedSink;
 
 /** Small OkHttp wrapper used by the OIDC client and the SEAtS gateway. */
 public final class Http {
@@ -22,6 +24,11 @@ public final class Http {
 			.connectTimeout(20, TimeUnit.SECONDS)
 			.readTimeout(30, TimeUnit.SECONDS)
 			.writeTimeout(30, TimeUnit.SECONDS)
+			.build();
+	private static final OkHttpClient POST_CLIENT = CLIENT.newBuilder()
+			.retryOnConnectionFailure(false)
+			.followRedirects(false)
+			.followSslRedirects(false)
 			.build();
 
 	private Http() {
@@ -52,10 +59,33 @@ public final class Http {
 	}
 
 	public static Result postJson(String url, String token, String json) throws IOException {
-		Request.Builder builder = new Request.Builder().url(url).post(RequestBody.create(json, JSON));
+		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
+		RequestBody body = new RequestBody() {
+			@Override
+			public MediaType contentType() {
+				return JSON;
+			}
+
+			@Override
+			public long contentLength() {
+				return bytes.length;
+			}
+
+			@Override
+			public void writeTo(BufferedSink sink) throws IOException {
+				sink.write(bytes);
+			}
+
+			@Override
+			public boolean isOneShot() {
+				// Also prevents replay after HTTP 503 with Retry-After: 0.
+				return true;
+			}
+		};
+		Request.Builder builder = new Request.Builder().url(url).post(body);
 		if (token != null) builder.header("Authorization", "Bearer " + token);
 		builder.header("Accept", "application/json");
-		return execute(builder.build());
+		return execute(POST_CLIENT, builder.build());
 	}
 
 	/** application/x-www-form-urlencoded POST, used by the OIDC token endpoint. */
@@ -75,7 +105,11 @@ public final class Http {
 	}
 
 	private static Result execute(Request request) throws IOException {
-		try (Response response = CLIENT.newCall(request).execute()) {
+		return execute(CLIENT, request);
+	}
+
+	private static Result execute(OkHttpClient client, Request request) throws IOException {
+		try (Response response = client.newCall(request).execute()) {
 			ResponseBody body = response.body();
 			long serverTime = 0L;
 			String date = response.header("Date");

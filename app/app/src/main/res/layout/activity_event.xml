@@ -236,18 +236,19 @@
 							android:textSize="14sp"
 							app:cornerRadius="25dp" />
 
-						<TextView
-							android:id="@+id/result_message"
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:layout_marginTop="6dp"
-							android:gravity="center"
-							android:lineSpacingExtra="1dp"
-							android:textColor="@color/text_secondary"
-							android:textSize="12sp" />
 					</LinearLayout>
 				</com.google.android.material.card.MaterialCardView>
 			</LinearLayout>
+
+			<TextView
+				android:id="@+id/result_message"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="6dp"
+				android:gravity="center"
+				android:lineSpacingExtra="1dp"
+				android:textColor="@color/text_secondary"
+				android:textSize="12sp" />
 
 			<com.google.android.material.card.MaterialCardView
 				android:id="@+id/no_code_card"

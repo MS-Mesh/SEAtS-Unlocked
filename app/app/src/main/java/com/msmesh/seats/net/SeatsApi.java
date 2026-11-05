@@ -182,7 +182,7 @@ public class SeatsApi {
 		} catch (Exception ignored) {
 		}
 		result.usedWindowTime = usedWindowTime;
-		if (!response.ok()) throw new ApiException("Check-in failed (HTTP " + response.code + "): " + result.message());
+		// Both callers interpret HTTP status and attendance confirmation through CheckInOutcome.
 		return result;
 	}
 
@@ -223,7 +223,7 @@ public class SeatsApi {
 	private Http.Result authorizedPost(String url, String json) throws ApiException {
 		try {
 			Http.Result result = Http.postJson(url, AuthManager.ensureToken(context), json);
-			if (result.code == 401) result = Http.postJson(url, AuthManager.refresh(context), json);
+			// ensureToken refreshes before sending; never replay a check-in POST after a response.
 			TimeSync.update(result.serverTimeMillis);
 			return result;
 		} catch (IOException error) {
