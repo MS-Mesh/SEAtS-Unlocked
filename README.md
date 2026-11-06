@@ -1,3 +1,11 @@
+# !PURELY OUT OF THE KINDNESS OF MY HEART AND MY IMPECCABLE ETHICS!
+
+# I reported this exploit to the UoN staff team the moment I released it, as if a member of the red team! Since 06.11.2026, this loophole has been patched - the version currently available on GitHub no longer retrieves past or future check-in codes!
+
+![My report to the UoN staff team](media/My%20report.png)
+
+---
+
 # SEAtS Unlocked
 
 Android client and protocol reference for SEAtS attendance systems. The app displays timetables and check-in codes and submits immediate, past or scheduled check-ins. Base application is linked with University of Nottingham, however can be modified for any other establishment.
